@@ -11,7 +11,7 @@ var overlays=["","","",overlay1,"","",overlay2,"","",overlay3,overlay4];
 var classes=["","","",'hideOverlay1',"","",'hideOverlay2',"","",'hideOverlay3', 'hideOverlay4']
 var count=0;
 
-document.onkeydown=function(){
+document.onkeypress=function(){
     if(!isPlaying){
     techno.play()
     isPlaying=true;
@@ -22,6 +22,24 @@ document.onkeydown=function(){
        isPlaying=false;
    }
 }
+
+
+document.querySelectorAll("button").forEach(btn=>{
+    btn.onclick=(e)=>{
+    if(!isPlaying){
+        techno.play()
+        e.target.innerHTML="Pause"
+        isPlaying=true;
+        }
+    
+       else{
+           techno.pause()
+           e.target.innerHTML="Play"
+           isPlaying=false;
+       }
+    }
+    })
+
 
 function hideOverlaysFx(){
  
@@ -88,4 +106,24 @@ function animateOne(){
 }
 
 animateOne()
+
+var api="6gRm9WZ0hk8YcvjvVS4tX2HAAnV5WmgE"
+
+var xhr=new XMLHttpRequest();
+
+xhr.open("GET",`https://api.giphy.com/v1/gifs/search?q=techno&apikey=${api}`,true)
+
+xhr.onload=function(){
+    if(xhr.status === 200){
+        console.log(JSON.parse(this.responseText))
+        console.log(JSON.parse(this.responseText).data[0].images.fixed_height.url)
+        
+        var img=JSON.parse(this.responseText).data[0].images.fixed_height.url
+        console.log(img)
+        document.querySelector(".giphy").innerHTML=`<img src=${img} alt='image'/>`
+    }
+}
+
+
+xhr.send()
 
